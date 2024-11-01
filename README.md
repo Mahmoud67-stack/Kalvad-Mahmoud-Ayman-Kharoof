@@ -145,7 +145,7 @@ trips.to_csv('yellow_tripdata_2024-01.csv', index=False)
 
 ### Part 4: Data Visualization
 #### Revenue Analysis
-![Revenue Over Time]([path/to/data_visualization.png](https://github.com/Mahmoud67-stack/Kalvad-Mahmoud-Ayman-Kharoof/blob/main/Part%204%20Data%20Visualization/data_visualization.png))
+![Alt vmware](https://github.com/Mahmoud67-stack/Kalvad-Mahmoud-Ayman-Kharoof/blob/main/Part%204%20Data%20Visualization/data_visualization.png)
 
 #### Key Observations:
 1. **Daily Revenue Range**:
