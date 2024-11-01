@@ -1,0 +1,37 @@
+Overview
+This Python script automates a data processing workflow in four main steps:
+
+Download the Data if it’s not already saved locally.
+Load the Data into a PostgreSQL Database so it can be queried and analyzed.
+Calculate the Average Fare for Each Day of the Week in the specified month.
+Save the Results as a CSV file for easy reference.
+Each function in the script performs one of these steps.
+
+Step-by-Step Explanation
+Download the Data (download_data):
+
+The script checks if the data file for the specified month (yellow_tripdata_2024-01.parquet) is already in the folder.
+If not, it downloads the file from a public URL and saves it locally.
+If the file is already there, it skips the download to save time and bandwidth.
+Load Data into PostgreSQL (load_data_to_db):
+
+The script connects to a PostgreSQL database using the provided database details (like database name, username, password, etc.).
+It reads the data from the downloaded .parquet file using pyarrow and pandas.
+It then writes this data into a PostgreSQL table (nyc_taxi_trips), replacing any existing table with the same name.
+Calculate the Average Fare per Day of the Week (calculate_average_fare):
+
+The script reconnects to the PostgreSQL database.
+It runs a SQL query that calculates the average fare for each day of the week (Sunday to Saturday) for the specified month (January 2024).
+It extracts and groups data based on the "day of the week" and averages the fares.
+The result is stored in a pandas.DataFrame, where the day numbers (0 to 6) are mapped to day names (Sunday to Saturday).
+Save the Results to a CSV File (save_to_csv):
+
+The calculated average fares are saved in a CSV file named average_fare_per_day.csv.
+This file can then be used for further analysis or reporting.
+Running the Script (__main__ Section)
+When you run this script, it goes through each of the steps:
+Downloads the data (if needed).
+Loads it into the database.
+Calculates average fares by day of the week.
+Saves the final report to a CSV file.
+If there are any errors during the process, they are caught and printed, making it easy to identify issues.

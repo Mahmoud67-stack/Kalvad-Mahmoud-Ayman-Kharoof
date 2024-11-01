@@ -1,0 +1,48 @@
+Overview of the Pipeline
+This code sets up a data pipeline using Apache Airflow to automate three main steps for managing and processing NYC Yellow Taxi data:
+1.	Download: Retrieves NYC Yellow Taxi data for a specific month from a given URL, which is obtained from the Network Tab after downloading the data from the NYC government website.
+2.	Transform: Cleans and prepares the data by filtering and renaming columns to match the target schema.
+3.	Load: Inserts the cleaned data into a PostgreSQL database in batches, ensuring efficient handling of large datasets.
+How Each Step Works in Detail
+1.	Tools and Libraries Used:
+o	Apache Airflow: Manages the pipeline, including scheduling, dependency management, task retries, and error notifications.
+o	Python Libraries:
+	Requests: For downloading data files from external URLs.
+	Pandas and PyArrow: For data manipulation and transformation. PyArrow is used to read the .parquet files, which is recommended by the “Handling .parquet from the NYC government”, while Pandas enables data filtering, renaming, and quality checks.
+	SQLAlchemy: Provides a connection to PostgreSQL and enables efficient batch insertion.
+	Logging: Custom logging is implemented to capture and report on pipeline events and errors, aiding in debugging and monitoring.
+2.	Download and Error Handling:
+o	Function: The download_data() function handles downloading the file using the requests library. The URL is dynamically generated based on the user-defined year and month parameters.
+o	Error Handling:
+	If the download fails (e.g., due to network issues or invalid URL), an exception is raised.
+	Airflow’s retry mechanism is configured to retry the task up to three times with a 5-minute delay between retries. This mitigates temporary network failures.
+o	Logging: Success and error messages are logged at each step to provide insights into the download process. If the download fails permanently after retries, a custom error message is logged for easy troubleshooting.
+3.	Data Quality and Transformation:
+o	Function: transform_data() reads the downloaded .parquet file into a pandas.DataFrame using pyarrow, then processes the data by applying several quality checks and transformations.
+o	Transformations:
+	Filtering: Only trips with fares above a user-defined threshold (default: $10) are retained.
+	Renaming Columns: Columns are renamed to a consistent format to align with the target schema (e.g., renaming tpep_pickup_datetime to pickup_time).
+o	Data Quality Checks:
+	Null Value Removal: Rows with nulls in critical columns (e.g., pickup_time, dropoff_time, fare_amount) are removed.
+	Logical Consistency Checks: Ensures that pickup_time is before dropoff_time and that fare_amount is positive.
+	Logging: Logs the count of rows that passed and failed the checks, helping identify potential data quality issues in the source data.
+o	Output: The cleaned data is saved to a CSV file (transformed_trips.csv) for efficient batch loading in the next step.
+4.	Loading Data into PostgreSQL:
+o	Function: load_data() reads the transformed CSV file in chunks and loads it into PostgreSQL to prevent memory overload.
+o	Batch Insertion: Using SQLAlchemy, the function loads data in chunks of 10,000 rows, allowing efficient handling of large files and preventing memory issues.
+o	Database Connection:
+	A SQLAlchemy engine is created to connect to PostgreSQL using the psycopg2 driver.
+	Once the data is loaded, the engine is closed to release database resources.
+o	Error Handling and Logging:
+	If a batch fails to load, an error is logged, and the task retries according to Airflow’s configuration.
+	Logs the number of rows loaded in each batch, providing visibility into the data load process.
+Airflow Configuration
+•	User-Defined Variables:
+o	Dynamic Configuration: The pipeline uses Airflow’s Variable feature to allow users to configure key settings (year, month, minimum fare amount, and notification email) without modifying the code. This approach makes the pipeline flexible and adaptable to different data sources and requirements.
+o	Parameters Used:
+	taxi_data_year and taxi_data_month: Define the dataset’s year and month.
+	min_fare_amount: Sets the minimum fare filter threshold.
+	notification_email: Specifies the email address for failure notifications.
+•	Retry and Notification Setup:
+o	Retries: Each task (download, transform, load) is set to retry up to three times with a 5-minute delay between attempts. If a task ultimately fails, an email notification is sent to the user-defined email address.
+o	Logging and Monitoring: Detailed logging is used throughout each function to capture task-specific information, errors, and data processing metrics. Airflow’s UI provides a view of task states and logs for each run, aiding in monitoring and debugging.

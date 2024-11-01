@@ -1,0 +1,12 @@
+# requirements.txt
+apache-airflow==2.5.0
+--constraint https://raw.githubusercontent.com/apache/airflow/constraints-2.5.0/constraints-3.7.txt
+apache-airflow-providers-postgres
+pandas==1.3.5
+requests==2.26.0
+sqlalchemy==1.4.27
+psycopg2-binary==2.9.3
+pyarrow==6.0.1
+pandas==1.3.5             # For data manipulation
+matplotlib==3.5.0         # For creating plots
+seaborn==0.11.2           # For styling and enhancing matplotlib plots
