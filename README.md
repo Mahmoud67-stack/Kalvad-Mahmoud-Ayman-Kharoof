@@ -1,105 +1,125 @@
-NYC Yellow Taxi Data Analysis and Pipeline Project
-Project Overview
-This project involves working with NYC Yellow Taxi data for the month of January 2024. The project is divided into several parts, including SQL challenges, data pipeline design, data processing with Python, and data visualization. The goal is to automate data ingestion, transformation, loading, and analysis using Python and PostgreSQL, with Airflow as the orchestrator for managing the pipeline.
+# NYC Yellow Taxi Data Analysis and Pipeline Project 🚕
 
-Dataset
-The dataset used is the NYC Yellow Taxi Trip Records, specifically for January 2024. It contains fields such as pickup and drop-off times, trip distances, fare amounts, and payment types. The data is publicly available and was obtained in .parquet format.
+## Table of Contents
+- [Overview](#overview)
+- [Dataset](#dataset)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Setup Instructions](#setup-instructions)
+- [Pipeline Overview](#pipeline-overview)
+  - [Pipeline Steps](#pipeline-steps)
+  - [Airflow Configuration](#airflow-configuration)
+- [Data Insights](#data-insights)
+  - [SQL Analysis Results](#sql-analysis-results)
+  - [Average Fare Analysis](#average-fare-analysis)
+  - [Key Findings](#key-findings)
+- [Results](#results)
+- [Contributors](#contributors)
 
-Project Structure
-Part 1: SQL Challenges
-Part 2: Data Pipeline Design
-Part 3: Data Processing with Python
-Part 4: Data Visualization
-Each part addresses specific data challenges, from querying and transforming data to visualizing insights.
+## Overview
+A comprehensive data pipeline and analysis project focusing on NYC Yellow Taxi data for January 2024. The project combines SQL analysis, automated data processing, and visualization to extract meaningful insights from taxi trip records.
 
-Table of Contents
-Project Overview
-Dataset
-Project Structure
-Installation
-Pipeline Overview
-Data Insights
-Data Visualization
-Results
-Contributors
-Installation
-Requirements
-To run this project, you’ll need the following:
+## Dataset
+### Source Information
+- **Source**: NYC Yellow Taxi Trip Records (January 2024)
+- **Format**: Parquet
+- **Key Fields**:
+  - Pickup/drop-off times
+  - Trip distances
+  - Fare amounts
+  - Payment types
 
-Python (Version 3.8 or later)
-PostgreSQL (with TimescaleDB if available)
-Apache Airflow
-Python Libraries: See requirements.txt for a full list of dependencies.
-Setting Up the Environment
-Clone the Repository:
+## Project Structure
+### Components
+1. **SQL Challenges**: Complex queries for data analysis
+2. **Data Pipeline Design**: Automated ETL processes
+3. **Data Processing**: Python-based transformations
+4. **Data Visualization**: Insights presentation
 
-bash
-Copy code
-git clone <your-repo-url>
-cd <repository-folder>
-Install Dependencies:
+## Installation
+### Prerequisites
+- Python 3.8+
+- PostgreSQL (TimescaleDB optional)
+- Apache Airflow
+- Python libraries (see `requirements.txt`)
 
-bash
-Copy code
-pip install -r requirements.txt
-Configure PostgreSQL:
+### Setup Instructions
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Mahmoud67-stack/Kalvad.git
+   cd <repository-folder>
+   ```
 
-Ensure PostgreSQL is running.
-Create a database (e.g., nyc_taxi_data).
-Update the PostgreSQL connection details in the Python script as per your setup.
-Airflow Setup:
+2. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Set up Airflow and start the web server to manage the pipeline.
-Pipeline Overview
-Steps in the Pipeline
-Download Data:
+3. **Configure PostgreSQL**
+   - Start PostgreSQL server
+   - Create database: `nyc_taxi_data`
+   - Update connection details in Python script
 
-Checks if the .parquet file for the specified month exists locally. If not, it downloads it from a public URL and saves it locally.
-Transform Data:
+4. **Set up Airflow**
+   - Configure Airflow settings
+   - Start web server
 
-Loads the .parquet file, filters trips with fares above $10, renames columns, and performs quality checks to remove rows with null values or invalid data.
-Load Data into PostgreSQL:
+## Pipeline Overview
+### Pipeline Steps
+1. **Data Download**
+   - Checks for local .parquet file
+   - Downloads from public URL if needed
 
-Loads the transformed data into PostgreSQL in batches to handle large data files efficiently.
-Calculate Average Fare by Day of the Week:
+2. **Data Transformation**
+   - Filters trips (fare > $10)
+   - Column renaming
+   - Quality checks
+   - Null value handling
 
-Analyzes the data to calculate the average fare per day for each day of the week in January 2024, storing the results in a CSV file.
-Data Visualization:
+3. **Database Loading**
+   - Batch processing for PostgreSQL
+   - Efficient large file handling
 
-Creates a time series chart showing the total revenue per day for January 2024.
-Airflow Configuration
-Retry Settings: Each task is configured to retry up to three times in case of failure, with a 5-minute delay between retries.
-Email Notifications: Configured to send notifications on task failure, making it easier to monitor the pipeline.
-Data Insights
-SQL Analysis
-Total Revenue Calculation:
+4. **Analysis**
+   - Daily average fare calculations
+   - Weekly patterns analysis
 
-Calculated total revenue generated by trips that ended within the last 30 days of the data.
-Top 3 Pickup Locations:
+5. **Visualization**
+   - Time series revenue charts
+   - Trend analysis
 
-Found the top 3 pickup locations by total revenue in January 2024.
-Frequent Riders:
+### Airflow Configuration
+- **Retry Settings**: 3 attempts, 5-minute delays
+- **Notifications**: Email alerts on failure
 
-Identified locations with passengers completing more than 5 trips within the last 30 days of data (if available).
-Average Fare Analysis (Python Script)
-Highest Average Fare: Monday with an average fare of $19.36.
-Lowest Average Fare: Saturday with an average fare of $16.97.
-Overall Trend: Higher fares on weekdays, potentially indicating increased demand at the start of the workweek.
-Data Visualization
-The visualization focuses on Total Revenue Per Day for January 2024, highlighting fluctuations, peaks, and dips. Here’s a summary:
+## Data Insights
+### SQL Analysis Results
+- **Revenue Metrics**: 30-day total revenue analysis
+- **Top Locations**: Identified 3 highest-revenue pickup points
+- **Customer Patterns**: Analysis of frequent riders (5+ trips/month)
 
-Fluctuations: Daily revenue fluctuates between $1.25 million and $2 million.
-Peaks: Highest revenue days occur around January 3rd, 13th, 17th, and 25th, potentially aligning with weekends or events.
-End-of-Month Stability: The revenue trend stabilizes toward the end of January.
+### Average Fare Analysis
+| Day      | Average Fare |
+|----------|-------------|
+| Monday   | $19.36      |
+| Saturday | $16.97      |
 
+### Key Findings
+- Higher fares on weekdays
+- Peak revenue: $1.25M - $2M daily
+- Notable revenue spikes: Jan 3rd, 13th, 17th, 25th
+- Stable end-of-month trends
 
-Results
-This project successfully:
+## Results
+The project successfully:
+- Automated data pipeline with Airflow
+- Delivered detailed SQL-based insights
+- Created comprehensive revenue visualizations
+- Established efficient large dataset management
 
-Automated data ingestion, transformation, and loading using Airflow.
-Enabled detailed SQL analysis to extract revenue-related insights.
-Visualized revenue trends, providing insights into demand patterns.
-The project showcases the benefits of using a well-orchestrated data pipeline to manage, analyze, and visualize large datasets.
+## Contributors
+- Mahmoud Ayman Kharoof
 
-Contributors
-Mahmoud Ayman Kharoof
+---
+*For more information or questions, please open an issue in the repository.*
